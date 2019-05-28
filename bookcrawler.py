@@ -8,14 +8,14 @@ config = configparser.ConfigParser()
 config.read('config.ini')
 http = urllib3.PoolManager()
 
-for i in range(1,5):
+for i in range(1,20):
     r = http.request(
         'GET',
         'http://www.aladin.co.kr/ttb/api/ItemList.aspx',
         fields={'ttbkey': config['ALADIN']['ttbkey'],
-                'QueryType': 'ItemNewAll',
+                'QueryType': 'Bestseller',
                 'MaxResults': '100',
-                'start': i,
+                'Start': i,
                 'SearchTarget': 'BOOK',
                 'Version': '20131101',
                 'output': 'js',
