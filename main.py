@@ -1,11 +1,14 @@
 #  python3 -m pip install PyMySQL
+import configparser
 import pymysql.cursors
 import datetime
 # Connect to the database
-connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='789123aa',
-                             db='light_novel_database',
+config = configparser.ConfigParser()
+config.read('config.ini')
+connection = pymysql.connect(host=config['DATABASE']['HOST'],
+                             user=config['DATABASE']['USER'],
+                             password=config['DATABASE']['PASSWORD'],
+                             db=config['DATABASE']['DB'],
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
@@ -73,7 +76,7 @@ try:
     #     result = cursor.fetchone()
     #     print(result)
     with open('./text.txt', 'r', encoding='UTF8') as infile:
-        for i in range(10):
+        while True:
             lines = []
             line = infile.readline()
             if not line:
