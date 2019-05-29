@@ -8,7 +8,7 @@ config = configparser.ConfigParser()
 config.read('config.ini')
 http = urllib3.PoolManager()
 
-for i in range(1,20):
+for i in range(0,20):
     r = http.request(
         'GET',
         'http://www.aladin.co.kr/ttb/api/ItemList.aspx',
@@ -72,9 +72,9 @@ for i in range(1,20):
                         print(pubisher_id)
                         sql = """INSERT
                         INTO
-                        light_novel(title, description, publication_date, created_at, updated_at, author_id, publisher_id, thumbnail)
-                        VALUES (%s, %s, %s, now(), now(), %s, %s, %s); """
-                        cursor.execute(sql, (data['title'], data['description'], data['publication_date'], author_id, pubisher_id, data['thumbnail']))
+                        light_novel(title, description, publication_date, created_at, updated_at, author_id, publisher_id, thumbnail, hit_rank, link, isbn, isbn13, aladin_id, adult, sales_point, standard_price, sales_price)
+                        VALUES (%s, %s, %s, now(), now(), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s); """
+                        cursor.execute(sql, (data['title'], data['description'], data['publication_date'], author_id, pubisher_id, data['thumbnail'], data['hit_rank'], data['link'], data['isbn'], data['isbn13'], data['aladin_id'], data['adult'], data['sales_point'], data['standard_price'], data['sales_price']))
                         connection.commit()
 
 
@@ -86,6 +86,15 @@ for i in range(1,20):
             data['author_name'] = item['author']
             data['publisher_name'] = item['publisher']
             data['thumbnail'] = item['cover']
+            data['hit_rank'] = item['bestRank']
+            data['link'] = item['link']
+            data['isbn'] = item['isbn']
+            data['isbn13'] = item['isbn13']
+            data['aladin_id'] = item['itemId']
+            data['adult'] = item['adult']
+            data['sales_point'] = item['salesPoint']
+            data['standard_price'] = item['priceStandard']
+            data['sales_price'] = item['priceSales']
             insert_light_novel(data)
     finally:
         connection.close()
