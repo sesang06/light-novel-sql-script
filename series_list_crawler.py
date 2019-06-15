@@ -14,10 +14,25 @@ connection = pymysql.connect(host=config['DATABASE']['HOST'],
                              cursorclass=pymysql.cursors.DictCursor)
 
 cursor = connection.cursor()
-
-def get_light_novel_aladin_id():
-    sql = "SELECT `aladin_id` FROM light_novel WHERE `series_aladin_id`=0 LIMIT 10;"
+def get_light_novel_count():
+    sql = """
+    SELECT COUNT(*) FROM light_novel;
+    """
     cursor.execute(sql)
+    result = cursor.fetchone()
+    if result is None:
+        return 0
+    else:
+        return result['COUNT(*)']
+
+def get_light_novel_aladin_id(page, row):
+    sql = """
+    SELECT `aladin_id` FROM 
+    (SELECT `adult`, `series_aladin_id`, `aladin_id` FROM `light_novel` LIMIT %s, %s) `light_novel`
+    WHERE (`light_novel`.`series_aladin_id` = 0 AND `light_novel`.`adult` = 0);
+    """
+
+    cursor.execute(sql, (page*row, row))
     result = cursor.fetchall()
     if result is None:
         return []
@@ -55,17 +70,25 @@ def update_light_novel_series_id(series_object):
             WHERE aladin_id IN (%s);
             """ % format_strings
     sql = update_caluse+where_caluse
-    print(sql)
 
     cursor.execute(sql, ([series_object['aladin_id']] + item_ids
                        )
                    )
     connection.commit()
-aladin_ids = get_light_novel_aladin_id()
-series_id_lists = list(map(lambda x: book.get_parent_series_id(x), aladin_ids))
-series_filtered_id_lists = list(filter(lambda x: x != 0, series_id_lists))
-series_object_list = list(map(lambda x: series.get_series(x), series_filtered_id_lists))
 
-for series_object in series_object_list:
-    insert_light_novel_series(series_object)
-    update_light_novel_series_id(series_object)
+total_count = get_light_novel_count()
+row = 100
+total_page = int(total_count / row)
+if total_count % row > 0:
+    total_page = total_page + 1
+
+for page in range(0, total_page):
+    print(page)
+    aladin_ids = get_light_novel_aladin_id(page, row)
+    series_id_lists = list(map(lambda x: book.get_parent_series_id(x), aladin_ids))
+    series_filtered_id_lists = list(filter(lambda x: x != 0, series_id_lists))
+    series_object_list = list(map(lambda x: series.get_series(x), series_filtered_id_lists))
+
+    for series_object in series_object_list:
+        insert_light_novel_series(series_object)
+        update_light_novel_series_id(series_object)

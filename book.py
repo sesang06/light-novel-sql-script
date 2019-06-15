@@ -22,4 +22,3 @@ def get_parent_series_id(book_id):
             series_id = m.group(1)
             break
     return series_id
-print(get_parent_series_id(193457128))
