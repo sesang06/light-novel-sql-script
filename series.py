@@ -20,6 +20,8 @@ def get_series(series_id):
     item_ids = list(map(lambda x: x.get("itemid"), divs))
 
     title_text = soup.find('a', {'href' : '/shop/common/wbookitem.aspx?bookid={}'.format(series_id) }).contents
-    return { 'item_ids': item_ids, 'title_text': title_text }
+    return {'aladin_id': series_id,
+            'item_ids': item_ids,
+            'title_text': title_text}
 series = get_series(115901)
 item_ids = series['item_ids']
