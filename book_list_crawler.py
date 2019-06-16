@@ -23,7 +23,7 @@ def getItemIds(page):
     r = http.request(
         'GET',
         url,
-        fields={'SortOrder': 2,
+        fields={'SortOrder': 5,
                 'page': page,
                 'CID': '50927',
                 'ViewRowsCount': '100'
@@ -38,6 +38,15 @@ def getItemIds(page):
     divs = soup.find_all("div", class_="ss_book_box")
     itemIds = list(map(lambda x: x.get("itemid"), divs))
     return itemIds
+
+def is_light_novel_in_database(item_id):
+    sql = "SELECT `id` FROM light_novel WHERE `aladin_id`=%s;"
+    cursor.execute(sql, item_id)
+    result = cursor.fetchone()
+    if result is None:
+        return False
+    else:
+        return True
 
 def getItemInfo(itemId):
     http = urllib3.PoolManager()
@@ -192,10 +201,14 @@ def insert_light_novel(data):
         connection.commit()
 
 # 현재 페이지 57까지
-for page in range(33, 58):
+for page in range(1, 100):
     print("pages" + str(page))
     itemIds = getItemIds(page)
-    itemInfos = list(map(lambda x: getItemInfo(x), itemIds))
+    if len(itemIds) == 0:
+        break
+    filtered_item_ids = list(filter(lambda x: not is_light_novel_in_database(x), itemIds))
+    print(filtered_item_ids)
+    itemInfos = list(map(lambda x: getItemInfo(x), filtered_item_ids))
     datas = list(map(lambda x: convert_item_to_data(x), itemInfos))
 
     for data in datas:
