@@ -52,8 +52,8 @@ try:
                     print(pubisher_id)
                     sql = """INSERT
                     INTO
-                    light_novel(title, description, publication_date, created_at, updated_at, author_id, publisher_id, thumbnail)
-                    VALUES (%s, '', %s, now(), now(), %s, %s, ''); """
+                    light_novel(title, description, publication_date, created_at, updated_at, author_id, publisher_id, thumbnail, index_description, publisher_description)
+                    VALUES (%s, '', %s, now(), now(), %s, %s, '', '', ''); """
                     cursor.execute(sql, (data['title'], data['publication_date'], author_id, pubisher_id))
                     connection.commit()
 

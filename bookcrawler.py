@@ -72,8 +72,8 @@ for i in range(0,20):
                         print(pubisher_id)
                         sql = """INSERT
                         INTO
-                        light_novel(title, description, publication_date, created_at, updated_at, author_id, publisher_id, thumbnail, hit_rank, link, isbn, isbn13, aladin_id, adult, sales_point, standard_price, sales_price)
-                        VALUES (%s, %s, %s, now(), now(), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s); """
+                        light_novel(title, description, publication_date, created_at, updated_at, author_id, publisher_id, thumbnail, hit_rank, link, isbn, isbn13, aladin_id, adult, sales_point, standard_price, sales_price, index_description, publisher_description)
+                        VALUES (%s, %s, %s, now(), now(), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '', ''); """
                         cursor.execute(sql, (data['title'], data['description'], data['publication_date'], author_id, pubisher_id, data['thumbnail'], data['hit_rank'], data['link'], data['isbn'], data['isbn13'], data['aladin_id'], data['adult'], data['sales_point'], data['standard_price'], data['sales_price']))
                         connection.commit()
 
