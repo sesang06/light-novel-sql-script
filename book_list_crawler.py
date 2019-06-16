@@ -4,6 +4,7 @@ import json
 import configparser
 import pymysql.cursors
 import datetime
+import pprint
 config = configparser.ConfigParser()
 config.read('config.ini')
 
@@ -214,6 +215,8 @@ for page in range(1, 100):
     datas = list(map(lambda x: convert_item_to_data(x), itemInfos))
 
     for data in datas:
+        pp = pprint.PrettyPrinter(indent=4)
+        pp.pprint(data)
         insert_light_novel(data)
 
 connection.close()
