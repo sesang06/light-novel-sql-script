@@ -139,9 +139,11 @@ def insert_light_novel(data):
         adult,
         sales_point,
         standard_price,
-        sales_price
+        sales_price,
+        index_description,
+        publisher_description
         )
-        VALUES (%s, %s, %s, now(), now(), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s); """
+        VALUES (%s, %s, %s, now(), now(), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '', ''); """
         cursor.execute(sql, (data['title'],
                              data['description'],
                              data['publication_date'],
