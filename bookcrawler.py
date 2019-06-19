@@ -7,7 +7,7 @@ import pprint
 import book
 import series
 import description
-import time
+import time as t
 config = configparser.ConfigParser()
 config.read('config.ini')
 http = urllib3.PoolManager()
@@ -327,10 +327,10 @@ def get_light_novel_info(data):
     return result
 def update_series_info(data):
     if data['series_aladin_id'] == 0 and data['adult'] == 0:
-        time.sleep(1)
+        t.sleep(1)
         series_id = book.get_parent_series_id(data['aladin_id'])
         if series_id != 0:
-            time.sleep(1)
+            t.sleep(1)
             series_object = series.get_series(series_id)
             pp = pprint.PrettyPrinter(indent=4)
             pp.pprint(series_object)
@@ -355,7 +355,7 @@ def update_light_novel_description(description_object):
 
 def update_description_info(data):
     if data['publisher_description'] == "" or data['index_description'] == "":
-        time.sleep(1)
+        t.sleep(1)
         description_object = description.get_description(data['aladin_id'])
         pp = pprint.PrettyPrinter(indent=4)
         pp.pprint(description_object)
@@ -378,7 +378,7 @@ for i in range(1,21):
 
     iteminfos = result['item']
     datas = list(map(lambda x: convert_item_to_data(x), iteminfos))
-    time.sleep(1)
+    t.sleep(1)
     for data in datas:
         pp = pprint.PrettyPrinter(indent=4)
         pp.pprint(data)
