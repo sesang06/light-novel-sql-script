@@ -23,5 +23,3 @@ def get_series(series_id):
     return {'aladin_id': series_id,
             'item_ids': item_ids,
             'title_text': title_text}
-series = get_series(115901)
-item_ids = series['item_ids']

@@ -30,7 +30,7 @@ def get_light_novel_aladin_id(page, row):
     sql = """
     SELECT `aladin_id` FROM 
     (SELECT `adult`, `series_aladin_id`, `aladin_id` FROM `light_novel` LIMIT %s, %s) `light_novel`
-    WHERE (`light_novel`.`adult` = 0);
+    WHERE (`light_novel`.`series_aladin_id` = 0 AND `light_novel`.`adult` = 0);
     """
 
     cursor.execute(sql, (page*row, row))
