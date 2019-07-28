@@ -10,7 +10,7 @@ import description
 config = configparser.ConfigParser()
 config.read('config.ini')
 http = urllib3.PoolManager()
-
+print('a')
 connection = pymysql.connect(host=config['DATABASE']['HOST'],
                              user=config['DATABASE']['USER'],
                              password=config['DATABASE']['PASSWORD'],
@@ -358,8 +358,9 @@ def update_description_info(data):
         pp.pprint(description_object)
         update_light_novel_description(description_object)
 time = get_now()
-
+print('b')
 for i in range(1,21):
+    print('c')
     r = http.request(
         'GET',
         'http://www.aladin.co.kr/ttb/api/ItemList.aspx',
@@ -371,8 +372,9 @@ for i in range(1,21):
                 'Version': '20131101',
                 'output': 'js',
                 'categoryid': '50927'})
+    print(r)
     result = json.loads(r.data.decode('utf-8'))
-
+    print(result)
     iteminfos = result['item']
     datas = list(map(lambda x: convert_item_to_data(x), iteminfos))
 
