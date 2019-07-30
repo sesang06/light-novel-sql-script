@@ -8,8 +8,10 @@ import book
 import series
 import description
 import time as t
+import os
+base_path = os.path.dirname(os.path.realpath(__file__))
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read(os.path.join(base_path, 'config.ini'))
 http = urllib3.PoolManager()
 print('a')
 connection = pymysql.connect(host=config['DATABASE']['HOST'],
