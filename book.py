@@ -1,13 +1,17 @@
 import urllib3
 import re
 from bs4 import BeautifulSoup 
+import time
 def get_parent_series_id(book_id):
+    time.sleep(1)
     #https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=193457128
     http = urllib3.PoolManager()
     response = http.request('GET', "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId={}".format(book_id),headers={
         'USER-AGENT':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:67.0) Gecko/20100101 Firefox/67.0'
     } )
     #파싱한다.
+    print('book+id')
+    print(book_id)
     soup = BeautifulSoup(response.data, 'html.parser')
     el = soup.find("div",{"id":"divProductBook"})
     if el == None :
