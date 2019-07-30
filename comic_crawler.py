@@ -7,9 +7,11 @@ import pprint
 import book
 import series
 import description
+import os
 import time as t
+base_path = os.path.dirname(os.path.realpath(__file__))
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read(os.path.join(base_path, 'config.ini'))
 http = urllib3.PoolManager()
 connection = pymysql.connect(host=config['DATABASE']['HOST'],
                              user=config['DATABASE']['USER'],
