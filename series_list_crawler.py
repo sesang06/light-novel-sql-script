@@ -5,6 +5,7 @@ import series
 import book
 import book_functions
 import pprint
+import time
 config = configparser.ConfigParser()
 config.read('config.ini')
 
@@ -84,11 +85,11 @@ if total_count % row > 0:
     total_page = total_page + 1
 pp = pprint.PrettyPrinter(indent=4)
 
-for page in range(0, total_page):
+for page in range(40, total_page):
     print(page)
     aladin_ids = get_light_novel_aladin_id(page, row)
     pp.pprint(aladin_ids)
-
+    time.sleep(1)
     series_id_lists = list(map(lambda x: book.get_parent_series_id(x), aladin_ids))
     series_filtered_id_lists = list(filter(lambda x: x != 0, series_id_lists))
     series_object_list = list(map(lambda x: series.get_series(x), series_filtered_id_lists))
