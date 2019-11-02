@@ -1,19 +1,22 @@
 import urllib3
 import re
 from bs4 import BeautifulSoup
+import time as t
+import requests
 def get_publisher_description(item_id):
     http = urllib3.PoolManager()
-    response = http.request(
-        'GET',
-        "https://www.aladin.co.kr/shop/product/getContents.aspx",
-        fields={'itemid': item_id,
+    response = requests.get(
+       "https://www.aladin.co.kr/shop/product/getContents.aspx",
+        params={'itemid': item_id,
                 'name': 'PublisherDesc'
                 },
         headers={
             'referer':'https://www.aladin.co.kr/shop/wproduct.aspx?ItemId={}'.format(item_id),
-            'USER-AGENT':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:67.0) Gecko/20100101 Firefox/67.0'}
+            'USER-AGENT':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:67.0) Gecko/20100101 Firefox/67.0'},
+        verify=False
     )
-    soup = BeautifulSoup(response.data, 'html.parser')
+    t.sleep(10)
+    soup = BeautifulSoup(response.text, 'html.parser')
     desc = soup.find(id='div_PublisherDesc_All')
     if desc is None:
         # desc = soup.find(id='')
@@ -29,17 +32,18 @@ def get_publisher_description(item_id):
 
 def get_index_description(item_id):
     http = urllib3.PoolManager()
-    response = http.request(
-        'GET',
+    response = requests.get(
         "https://www.aladin.co.kr/shop/product/getContents.aspx",
-        fields={'itemid': item_id,
+        params={'itemid': item_id,
                 'name': 'Introduce'
                 },
         headers={
             'referer':'https://www.aladin.co.kr/shop/wproduct.aspx?ItemId={}'.format(item_id),
-            'USER-AGENT':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:67.0) Gecko/20100101 Firefox/67.0'}
+            'USER-AGENT':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:67.0) Gecko/20100101 Firefox/67.0'},
+        verify=False
     )
-    soup = BeautifulSoup(response.data, 'html.parser')
+    t.sleep(10)
+    soup = BeautifulSoup(response.text, 'html.parser')
     # print(soup)
     desc = soup.find(id='div_TOC_All')
     if desc is None:

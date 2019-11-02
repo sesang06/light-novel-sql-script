@@ -1,22 +1,23 @@
 import urllib3
 import re
 import time
-from bs4 import BeautifulSoup 
+import requests
+from bs4 import BeautifulSoup
+
 def get_series(series_id):
     book_id_list = []
     #https://www.aladin.co.kr/shop/common/wbookitem.aspx?bookid=31774725
+    urllib3.disable_warnings()
     time.sleep(1)
     http = urllib3.PoolManager()
-    response = http.request(
-        'GET',
+    response = requests.get(
         "https://www.aladin.co.kr/shop/common/wbookitem.aspx",
-        fields={'bookid': series_id,
+        params={'bookid': series_id,
                 'ViewRowsCount': 100
                 },
-        headers={
-            'USER-AGENT':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:67.0) Gecko/20100101 Firefox/67.0'}
+        verify=False
     )
-    soup = BeautifulSoup(response.data, 'html.parser')
+    soup = BeautifulSoup(response.text, 'html.parser')
     divs = soup.find_all("div", class_="ss_book_box")
     print('series_idi')
     print(series_id)
