@@ -8,7 +8,7 @@ def get_series(series_id):
     book_id_list = []
     #https://www.aladin.co.kr/shop/common/wbookitem.aspx?bookid=31774725
     urllib3.disable_warnings()
-    time.sleep(1)
+    time.sleep(10)
     http = urllib3.PoolManager()
     response = requests.get(
         "https://www.aladin.co.kr/shop/common/wbookitem.aspx",

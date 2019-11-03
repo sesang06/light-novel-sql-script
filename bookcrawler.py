@@ -322,6 +322,27 @@ def update_light_novel_series_id(series_object):
                    )
     connection.commit()
 
+def update_light_novel_series_publication_date(series_aladin_id):
+    sql = "SELECT max(publication_date) AS publication_date FROM light_novel WHERE series_aladin_id = %s;"
+    cursor.execute(sql, series_aladin_id)
+    result = cursor.fetchone()
+    if result is None:
+        return
+    else:
+        publication_date = result['publication_date']
+        print(publication_date)
+        sql = """
+        UPDATE light_novel_series SET 
+        updated_at = now(),
+        last_publication_date = %s
+        WHERE aladin_id = %s
+        """
+        cursor.execute(sql,
+                    (publication_date,
+                    series_aladin_id
+                    ))
+        connection.commit()
+
 def get_light_novel_info(data):
     sql = "SELECT * FROM light_novel WHERE `aladin_id`=%s;"
     cursor.execute(sql, data['aladin_id'])
@@ -338,6 +359,9 @@ def update_series_info(data):
             pp.pprint(series_object)
             insert_light_novel_series(series_object)
             update_light_novel_series_id(series_object)
+            update_light_novel_series_publication_date(series_object['aladin_id'])
+    else:
+        update_light_novel_series_publication_date(data['series_aladin_id'])
 
 def update_light_novel_description(description_object):
     sql = """
